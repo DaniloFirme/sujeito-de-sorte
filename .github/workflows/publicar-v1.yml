@@ -1,0 +1,21 @@
+name: Publicar tag v1.0
+on:
+  push:
+    branches: [master]
+permissions:
+  contents: write
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Criar a tag da primeira versao
+        run: |
+          if git ls-remote --tags origin refs/tags/v1.0 | grep -q .; then
+            echo 'Tag v1.0 ja existe'
+          else
+            git tag v1.0 "$GITHUB_SHA"
+            git push origin refs/tags/v1.0
+          fi
